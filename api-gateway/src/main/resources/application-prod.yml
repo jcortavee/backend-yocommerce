@@ -1,0 +1,53 @@
+server:
+  port: ${PORT:8090}
+
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user-management
+          uri: lb://user-management
+          predicates:
+            - Path=/api/user-management/**
+          filters:
+            - StripPrefix=2
+        - id: products-management
+          uri: lb://products-management
+          predicates:
+            - Path=/api/products-management/**
+          filters:
+            - StripPrefix=2
+        - id: delivery-management
+          uri: lb://delivery-management
+          predicates:
+            - Path=/api/delivery-management/**
+          filters:
+            - StripPrefix=2
+  zipkin:
+    base-url: ${ZIPKIN_URL:http://zipkin}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${LB_AUTH_ISSUER_URI:http://auth-manager}
+      client:
+        registration:
+          superstore:
+            provider: spring
+            client-id: superstore
+            client-secret: 123456
+            authorization-grant-type: authorization_code
+            redirect-uri: ${LB_GATEWAY_URI:http://api-gateway}/authorized
+            scope: read
+            client-name: superstore
+        provider:
+          spring:
+            issuer-uri: ${LB_AUTH_ISSUER_URI:http://auth-manager}
+
+logging:
+  file:
+    path: /app/logs

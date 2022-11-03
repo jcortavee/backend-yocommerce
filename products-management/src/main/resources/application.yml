@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: @activeProfile@
+  application:
+    name: products-management

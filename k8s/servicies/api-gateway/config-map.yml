@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-gateway
+data:
+  port: "8090"
+  lb_auth_issuer_uri: http://192.168.76.230:32220
+  lb_gateway_uri: http://192.168.76.230:30089

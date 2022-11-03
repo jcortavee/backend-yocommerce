@@ -1,0 +1,25 @@
+server:
+  port: ${PORT:7001}
+
+spring:
+  # Database
+  datasource:
+    url: jdbc:${DB_PROVIDER:mysql}://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_DATABASE:storegt_products_management}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root1234}
+  jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+  file:
+    path: /app/logs
+
+
+# Custom
+app:
+  services:
+    users-management:
+      url: http://localhost:7000

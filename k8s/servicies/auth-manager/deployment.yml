@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-manager
+  template:
+    metadata:
+      name: auth-manager
+      labels:
+        app: auth-manager
+    spec:
+      containers:
+        - name: auth-manager
+          image: jcortave/auth-manager
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8091
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: port
+                  name: auth-manager
+            - name: LB_AUTH_ISSUER_URI
+              valueFrom:
+                configMapKeyRef:
+                  key: lb_auth_issuer_uri
+                  name: auth-manager
+            - name: LB_GATEWAY_URI
+              valueFrom:
+                configMapKeyRef:
+                  key: lb_gateway_uri
+                  name: auth-manager

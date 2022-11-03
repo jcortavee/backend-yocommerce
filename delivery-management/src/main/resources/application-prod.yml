@@ -1,0 +1,33 @@
+server:
+  port: ${PORT:9002}
+
+spring:
+  datasource:
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:admin1234}
+    url: jdbc:${DB_PROVIDER:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_DATABASE:delivery_management}
+  jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+  cloud:
+    kubernetes:
+      secrets:
+        enable-api: true
+      discovery:
+        all-namespaces: true
+  zipkin:
+    base-url: ${ZIPKIN_URL:http://zipkin}
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+  file:
+    path: /app/logs
+
+
+app:
+  services:
+    users-management:
+      url: http://users-management-service:9000
+    products-management:
+      url: http://products-management-service:9001

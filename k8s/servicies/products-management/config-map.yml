@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: products-management
+data:
+  port: "9001"
+  db_port: "5433"
+  db_host: sgt_postgres_pm

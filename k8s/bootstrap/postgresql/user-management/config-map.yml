@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sgt-postgres-um
+data:
+  postgres_password: admin1234
+  postgres_database: user_management

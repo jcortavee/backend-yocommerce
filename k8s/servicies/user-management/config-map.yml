@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-management
+data:
+  port: "9000"
+  db_port: "5432"
+  db_host: sgt-postgres-um

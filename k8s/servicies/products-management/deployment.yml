@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-management
+  template:
+    metadata:
+      name: products-management
+      labels:
+        app: products-management
+    spec:
+      containers:
+        - name: products-management
+          image: jcortave/products-management
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9001
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: port
+                  name: products-management
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: db_port
+                  name: products-management
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: db_host
+                  name: products-management

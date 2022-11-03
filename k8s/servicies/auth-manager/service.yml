@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-manager
+spec:
+  selector:
+    app: auth-manager
+  ports:
+    - port: 8091
+      targetPort: 8091
+  type: LoadBalancer

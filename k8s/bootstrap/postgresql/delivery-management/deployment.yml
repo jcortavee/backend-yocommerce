@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sgt-postgres-dm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sgt-postgres-dm
+  template:
+    metadata:
+      name: sgt-postgres-dm
+      labels:
+        app: sgt-postgres-dm
+    spec:
+      containers:
+        - name: sgt-postgres-dm
+          image: postgres:14-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5434
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres_password
+                  name: sgt-postgres-dm
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres_database
+                  name: sgt-postgres-dm
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data-postgresql
+      volumes:
+        - name: data-postgresql
+          persistentVolumeClaim:
+            claimName: sgt-postgres-dm-volume-claim

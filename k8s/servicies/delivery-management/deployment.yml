@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-management
+  template:
+    metadata:
+      name: delivery-management
+      labels:
+        app: delivery-management
+    spec:
+      containers:
+        - name: delivery-management
+          image: jcortave/delivery-management
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9002
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: port
+                  name: delivery-management
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: db_port
+                  name: delivery-management
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: db_host
+                  name: delivery-management

@@ -1,0 +1,6 @@
+server:
+  port: ${PORT:8091}
+
+logging:
+  file:
+    path: /app/logs

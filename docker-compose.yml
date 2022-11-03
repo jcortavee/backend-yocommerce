@@ -1,0 +1,104 @@
+version: "3.9"
+
+services:
+  sgt_postgres_pm:
+    container_name: stg_postgres_pm
+    image: postgres:14-alpine
+    ports:
+      - "5433:5433"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: products_management
+    volumes:
+      - data-postgres-pm:/var/lib/postgresql/data
+    command:
+      - "-p 5433"
+    networks:
+      - spring
+
+  sgt_postgres_um:
+    container_name: sgt_postgres_um
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      DB_PASSWORD: admin1234
+      DB_DATABASE: user_management
+    volumes:
+      - data-postgres-um:/var/lib/postgresql/data
+    networks:
+      - spring
+
+  sgt_postgres_dm:
+    container_name: stg_postgres_dm
+    image: postgres:14-alpine
+    ports:
+      - "5434:5434"
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: delivery_management
+    volumes:
+      - data-postgres-dm:/var/lib/postgresql/data
+    command:
+      - "-p 5434"
+    networks:
+      - spring
+
+  products-management-service:
+    container_name: products-management-service
+    image: jcortave/products-management
+    ports:
+      - "9001:9001"
+    environment:
+      - "PORT=9001"
+      - "DB_PORT=5433"
+      - "DB_HOST=sgt_postgres_pm"
+    networks:
+      - spring
+    depends_on:
+      - sgt_postgres_pm
+    restart: always
+
+  users-management-service:
+    container_name: users-management-service
+    image: jcortave/user-management
+    ports:
+      - "9000:9000"
+    environment:
+      - "PORT=9000"
+      - "DB_PORT=5432"
+      - "DB_HOST=sgt_postgres_um"
+    networks:
+      - spring
+    depends_on:
+      - sgt_postgres_um
+    restart: always
+
+  delivery-management-service:
+    container_name: delivery-management-service
+    image: jcortave/delivery-management
+    ports:
+      - "9002:9002"
+    environment:
+      - "PORT=9002"
+      - "DB_PORT=5434"
+      - "DB_HOST=sgt_postgres_dm"
+    networks:
+      - spring
+    depends_on:
+      - sgt_postgres_dm
+    restart: always
+
+volumes:
+  data-postgres-pm:
+    name: data-postgres-pm
+  data-postgres-um:
+    name: data-postgres-um
+  data-postgres-dm:
+    name: data-postgres-dm
+
+networks:
+  spring:

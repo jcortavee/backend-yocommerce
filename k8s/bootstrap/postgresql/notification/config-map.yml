@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification-postgresql
+data:
+  postgres_password: admin1234
+  postgres_database: notification
+  postgres_user: admin

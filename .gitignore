@@ -1,0 +1,9 @@
+.idea
+user-management/target
+products-management/target
+delivery-management/target
+api-gateway/target
+auth-manager/target
+amqp/target
+notification/target
+commons/target

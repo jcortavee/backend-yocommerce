@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification-postgresql
+  template:
+    metadata:
+      name: notification-postgresql
+      labels:
+        app: notification-postgresql
+    spec:
+      containers:
+        - name: notification-postgresql
+          image: postgres:14-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres_password
+                  name: notification-postgresql
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres_database
+                  name: notification-postgresql
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: postgres_user
+                  name: notification-postgresql
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: data-postgresql
+      volumes:
+        - name: data-postgresql
+          persistentVolumeClaim:
+            claimName: notification-postgresql-pvc

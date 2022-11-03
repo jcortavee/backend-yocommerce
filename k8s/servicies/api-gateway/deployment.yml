@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      name: api-gateway
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: jcortave/api-gateway
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8090
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: port
+                  name: api-gateway
+            - name: LB_AUTH_ISSUER_URI
+              valueFrom:
+                configMapKeyRef:
+                  key: lb_auth_issuer_uri
+                  name: api-gateway
+            - name: LB_GATEWAY_URI
+              valueFrom:
+                configMapKeyRef:
+                  key: lb_gateway_uri
+                  name: api-gateway

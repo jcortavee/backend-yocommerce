@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-management
+spec:
+  selector:
+    app: products-management
+  ports:
+    - port: 81
+      targetPort: 9001
+  type: LoadBalancer
